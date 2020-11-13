@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <style>
+            .avantar{
+                width: 5%;
+                height: 5%;
+                object-fit:cover;
+                border-radius:50%;
+            }
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+			}
+            input[type=text]{
+                background:none;
+                border: 1px solid white;
+                width: 80%;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            select{
+                width: 40%;
+                background:none;
+                border: 1px solid white;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            td { width: 33%; }
+        </style>
+        <script>
+            function set_billing_address_same(){
+                $('#id_billing_address').val($('#id_shipping_address').val());
+                $('#id_billing_address2').val($('#id_shipping_address2').val());
+                $('#id_billing_city').val($('#id_shipping_city').val());
+                $('#id_billing_country').val($('#id_shipping_country').val());
+                $('#id_billing_zip_code').val($('#id_shipping_zip_code').val());
+            }
+
+        </script>
+    </head>
+    <body style="background-color: #ADB2BE;">
+        {% include 'nav/home_nav.html' %}
+        <div id='art_ticker_news' style="background-color:#2A303B; height: 3vh;"></div>
+        <div class="row m-2 didot mx-auto" style="width: 95%;">
+            <div class="col-9" style="overflow-y:auto;">
+                <div id="shipping_address" class="mt-3 p-2">
+                    Shipping Address
+                    <hr>
+                    <table class="table table-borderless" style="width: 100%;">
+                        <tr>
+                            <td>Address 1</td>
+                            <td colspan="2"> {{ form.shipping_address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address 2</td>
+                            <td colspan="2">{{ form.shipping_address2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Zip Code {{ form.shipping_zip }}
+                            </td>
+                            <td>
+                                City {{ form.shipping_city }}
+                            </td>
+                            <td> 
+                                Country {{ form.shipping_country }}
+                            </td>
+                        </tr>
+                    </table>
+                
+                </div>
+                <div id="billing_address" class="mt-3 p-2">
+                    Billing Address
+                    <hr>
+                    <input type="checkbox" id='same_address' onclick="set_billing_address_same()"> Use Same Address With Shipping Address <br>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td>Address 1</td>
+                            <td colspan="2"> {{ form.billing_address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address 2</td>
+                            <td colspan="2">{{ form.billing_address2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Zip Code {{ form.billing_zip }}
+                            </td>
+                            <td>
+                                City {{ form.billing_city }}
+                            </td>
+                            <td> 
+                                Country {{ form.billing_country }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id='ordered_items' class="mt-3 p-2">
+                    Ordered Items
+                    <hr>
+                    <div class="container mx-auto">
+                        <div class="row w-100">
+                            <div class="col text-center">
+                                <img src="{% static 'images/sample_3.jpg' %}" style="height: 10vh;">
+                            </div>
+                            <div class="col ml-4 align-self-center text-center">
+                                <div >
+                                    Product <br>
+                                    Price <br>
+                                    Quantity
+                                </div>
+                            </div>
+                            <div class="col align-self-center text-center">
+                                <button class="btn btn-danger">&times;</button>
+                            </div>
+                        </div><hr>
+                    </div>
+                </div>
+                <div class="mt-2 p-2">
+                    Payment
+                    <hr>
+                    <div class="d-flex flex-row">
+                        {% for option in form.payment_option %}
+                            <div class="mx-2">{{ option }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card box-shadow mt-5" style='background-color: #E0E3EA;'>
+                    <div class="card-header" style='background-color: #E0E3EA;'>
+                        <h5> Order Information </h5>
+                    </div>
+                    <div class="p-3 row w-100">
+                        <div class="col">
+                            Product Name
+                        </div>
+                        <div class="col text-right">
+                            23.30
+                        </div>
+                    </div><hr>
+                    <div id='coupon_code' class="p-2">
+                        <button class="btn btn-dark box-shadow float-right"> Use Coupon</button>
+                    </div><hr>
+                    <div id='order_total' class="p-2">
+                        <div class="float-right">
+                            Amount:<br>
+                            Delivery: <br>
+                            Total: <br>
+                        </div>
+                    </div><hr>
+                    <div id='proceed' class="p-2">
+                        <button class="btn btn-light box-shadow float-right"> Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+    </body>
+</html>

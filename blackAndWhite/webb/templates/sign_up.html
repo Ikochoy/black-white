@@ -1,0 +1,94 @@
+{% load static %}
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+            input {
+                width: 75%;
+                background: none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+            }
+			.cover{
+				background-size: cover;
+                background-position: 50% 50%;
+                width: 100%;
+                height: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.cover-image {
+				background-image: url("{% static 'images/cover.png' %}");
+				background-color: #cccccc;
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+			.btn-white{
+				background-color: rgba(255, 255, 255, 0.6);
+				border: 3px solid white;
+				border-radius: 0%;
+				letter-spacing: 0.2vw;
+				font-size: 12px;
+			}
+			.btn-white:hover{
+				background-color:white;
+				color: black;
+				border-radius: 0%;
+				letter-spacing: 0.2vw;
+				font-size: 12px;
+			}
+		</style>
+    </head>
+    <body style="background-color: lightgray;">
+        <nav id="navbar" class="navbar navbar-expand py-0 navbar-right" style="background-color: black; height:fit-content;">
+            <a class="navbar-brand ml-4 mt-2 didot bold" style="color:white;font-size: 26px;">black&White</a>
+        </nav>
+        <div id="art_news_ticker" style="background-color: rgb(59, 59, 66); height: 3vh;" class="nav-shadow">
+
+		</div>
+        <form action='.' method="POST" class="mt-5 container text-center" style="height: fit-content;">
+            {% csrf_token %}
+            <h1 class="didot mb-4">Create An Account</h1><br>
+            <table style="width: 60%;height: fit-content; line-height: 1.5;" class="mx-auto my-auto didot">
+                {{ form.as_table }}
+                <tr>
+                    <td class="text-right">
+						<br>
+						<input type="checkbox" id='agree_to_policy' name='agree_to_policy' />
+					</td>
+					<td>
+						<br>
+						I agree to the users' policy.
+					</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><br>{{ form.err }}</td>
+                </tr>
+            </table>
+            <input type="submit" class="btn btn-secondary mt-5 didot" style="width:20%;" value="Confirm">
+        </form>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+    </body>
+</html>

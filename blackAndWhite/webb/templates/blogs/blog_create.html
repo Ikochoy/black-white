@@ -1,0 +1,184 @@
+{% load static %}
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.9), 0 6px 20px 0 rgba(121, 120, 120, 0.486);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+            }
+            .borderless td, .borderless th, .borderless tr {
+                border: none;
+            }
+            input{
+                background:none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+            }
+            textarea{
+                overflow-y: auto;
+                background:none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+                height: 10vh;
+                color:white
+            }
+            ::placeholder {
+                color: gainsboro;
+            }
+            ul{
+                list-style:none;
+            }
+        </style>
+        <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+        <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+        <script>
+            function create_hashtag(){
+                text = $('#hashtag_input').val();
+                $.ajax({
+                    url: "{% url 'webb:create_hashtag' %}",
+                    data:{
+                        text: text
+                    },
+                    success: function(response){
+                        pk = JSON.parse(response['hashtag_id']);
+                        create_hashtag_box(text, pk);
+                    },
+                    error: function(){
+                        alert("Oops. Something went wrong. Please try again.");
+                    }
+                });
+            }
+
+
+            function create_hashtag_box(text, pk){
+                $('#hashtag_row').prepend(
+                    "<button type='button' class='btn btn-light hashtag mx-2' "+
+                    "style='width: fit-content; overflow-x: auto; overflow-y:auto'>"+
+                        text+"</button>"
+                )
+                hashtag = $('#hashtag_ids_input').val();
+                hashtag += pk + ", ";
+                $('#hashtag_ids_input').val(hashtag);
+            }
+
+            $(document).ready(function () {
+                $(".django-ckeditor-widget").css("width", "100%");
+                $(".django-ckeditor-widget").css("height", "65%");
+            });
+            $(window).bind('beforeunload', function(){
+                alert('Are you sure you want to leave? All work will NOT be saved.');
+            });
+        </script>
+    </head>
+    <body style="background-color: whitesmoke;">
+        {% include 'nav/home_nav.html' %}
+        <div id="art_news_ticker" style="background-color: rgb(165, 173, 177); height: 3vh;">
+
+        </div>
+        <div class="mt-4 mx-auto didot" style="width: 95%;">
+            <form id="blog_form" action='.' method="POST" class="mt-2 w-100" style="line-height: 1.6;" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mx-auto w-100">
+                    <span class="col">
+                        <h2>Write A New Blog</h2>
+                    </span>
+                    <h3 style="width: 80%;" class="col">Title: {{ form.title }}</h3>
+                    <span class="col">Thumbnail Cover Picture: {{ form.cover_thumbnail }}</span>
+                </div>
+                <div id="hashtag_row" class="d-flex flex-row flex-nowrap" style="font-size: 12px; overflow-x: auto;">
+                    <button type="button" class="btn btn-outline-dark" style="font-size: 12px;"
+                    data-toggle="modal" data-target='#hashtag_modal'>+ Create Hashtag</button>
+                </div>
+                <div class="mt-3">
+                    {{ form.media }}
+                    {{ form.text }}
+                </div>
+                <input type="text" id="hashtag_ids_input" style="display:none;" name="hashtag_ids"/>
+                <input type="submit" class="btn btn-secondary float-right px-5 mt-4" value="Create"/>
+            </form>
+        </div>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+
+    </body>
+</html>
+<div id="hashtag_modal" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content didot">
+            <div class="modal-header" style="border:none;">
+                <h5>Create Hashtag</h5>
+                <button class="close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="hashtag_input" placeholder="Enter New Hashtag Here" style="width: 80%;"/><br>
+                <button type="button" class="btn btn-dark float-right" onclick="create_hashtag()">Confirm</button>
+
+            </div>
+        </div>
+    </div>
+</div>

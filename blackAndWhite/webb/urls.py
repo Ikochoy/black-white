@@ -1,0 +1,46 @@
+from django.urls import path
+from .views import *
+from django.contrib.auth import views as auth_views
+
+app_name = 'webb'
+urlpatterns=[
+	path('home/', home, name='home'),
+	path('all_products/<str:category_name>', ProductByCategoryListView.as_view(), name='products'),
+	path('<int:pk>/creator_info/', CreatorDetailView.as_view(), name='creator_info'),
+	path('<int:pk>/creator_update/', CreatorUpdateView.as_view(), name='creator_update'),
+	path('<int:pk>/product_detail/', ProductDetailView.as_view(), name='product_detail'),
+	path('<int:pk>/product_cart/', ProductCartView.as_view(), name='product_cart'),
+	path('product_create/', ProductCreateView.as_view(), name='product_create'),
+	path('<int:pk>/product_update/', ProductUpdateView.as_view(), name='product_update'),
+	path('blog_create/', BlogCreateView.as_view(), name='blog_create'),
+	path('<int:pk>/blog_update/', BlogUpdateView.as_view(), name='blog_update'),
+	path('<int:pk>/blog_article/', BlogDetailView.as_view(), name='blog_detail'),
+	path('critique_create/', CritiqueCreateView.as_view(), name='critique_create'),
+	path('<int:pk>/critique_update/', CritiqueUpdateView.as_view(), name='critique_update'),
+	path('<int:pk>/critique_article/', CritiqueDetailView.as_view(), name='critique_detail'),
+	path('creator_create/', CreatorCreateView.as_view(), name='creator_create'),
+	path('sign_up/', sign_up, name='sign_up'),
+	path('login/', signin, name='sign_in'),
+	path('signout/', signout, name='sign_out'),
+	path('hashtag_create/', create_hashtag, name='create_hashtag'),
+	path('hashtag_delete/', delete_hashtag, name='delete_hashtag'),
+	path('hashtag_critique_delete/', delete_critique_hashtag, name='delete_critique_hashtag'),
+	path('see_creator_product_detail/', see_creator_product_detail, name='creator_product_detail'),
+	path('hide_from_profile/', hide_from_profile, name='hide_from_profile'),
+	path('follow/', follow, name='follow'),
+	path('unfollow/', unfollow, name='unfollow'),
+	path('<int:pk>/profile_details/', ProfileDetailView.as_view(), name='profile_detail'),
+	path('load_address_form/', load_address_form, name='load_address_form'),
+	path('create_address/', create_address, name='create_address'),
+	path('<int:pk>/update_address_modal/', update_address_modal , name='update_address_view'),
+	path('<int:pk>/update_address/', update_address, name='update_address'),
+	path('<int:pk>/hashtag_detail/', HashtagDetailView.as_view(), name='hashtag_detail'),
+	path('verify_email/<uidb64>/<token>/', verify_email, name='verify_email'),
+	path('change_email/', change_email, name='change_email'),
+	path('<int:pk>/checkout/', checkout_form, name='checkout'),
+	path('<int:pk>/add_to_cart', add_to_cart, name='add_to_cart'),
+	path('<int:pk>/remove_from_cart', remove_from_cart, name='remove_from_cart'),
+	path('<int:pk>/change_order_product_quantity/', change_order_product_quantity, name='change_order_product_quantity'),
+	path('render_order_cart_view/', order_cart_view, name='order_cart_view'),
+
+]	

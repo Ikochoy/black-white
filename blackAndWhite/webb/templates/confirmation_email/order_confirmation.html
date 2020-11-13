@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <style>
+			.cover{
+				background-size: cover;
+                background-position: 50% 50%;
+                width: 100%;
+                height: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.cover-image {
+				background-image: url("{% static 'images/cover.png' %}");
+				background-color: #cccccc;
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+			.btn-white{
+				background-color: rgba(255, 255, 255, 0.6);
+				border: 3px solid white;
+				border-radius: 0%;
+				letter-spacing: 0.2vw;
+				font-size: 12px;
+			}
+			.btn-white:hover{
+				background-color:white;
+				color: black;
+				border-radius: 0%;
+				letter-spacing: 0.2vw;
+				font-size: 12px;
+			}
+		</style>
+    </head>
+    <body>
+        <div class="container w-50 didot px-0" style="background-color: #E7EAED; overflow-y: auto;">
+            <div class="w-100 cover-image text-center" style="height: 40vh;">
+                <a class="btn btn-white didot p-3" style="margin-top:24vh;" href="{% url 'webb:products' 'AP' %}">VIEW PRODUCTS</a>
+            </div>
+            <div style="background-color: black; height: 2vh;" class="w-100">
+            </div>
+            <div style="background-color: #4F515B; height: 3vh;" class="w-100">
+            </div>
+            <div class="text-center p-3">
+                <h2 style="text-shadow: 1px 1px 3px #929292; letter-spacing: 8px; font-family: 'Times New Roman', Times, serif;" class="mt-3">THANK YOU FOR ORDERING</h2>
+			</div><hr>
+			<div class="p-3 container mx-auto" style="width: 80%; font-size: 18px;line-height: double;">
+				Hi {{ user.username }},<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;Your order has been placed! Thank you for shopping with us. 
+				This is just an email to confirm your order. When your product is ready, we will ship it at once.
+				We hope you had a great experience with us.
+				<div id='shipping_address' class="mt-4">
+					<strong>Where:</strong><br>
+					{{ user.profile.get_shipping_address }}
+				</div>
+				<div id="order_details" class="mt-4">
+					<strong>What You Ordered:</strong><br>
+					Order Reference No: {{ order.reference_no }}
+					<div id='items_ordered' class="mt-4">
+						<strong>Items Ordered:</strong><hr>
+						<!-- looping each ordered product -->
+						{% for o_product in order.products %}
+						<div class="row w-100" style="font-weight: bold;">
+							<div class="col">
+								{{ o_product.product.name }} -- {{ o_product.product.uploader }}<br>
+								QTY: {{ o_product.quantity}}
+							</div>
+							<div class="col text-right">
+								{{ o_product.product.price }}
+							</div>
+						</div><hr>
+						{% endfor %}
+					</div>
+					<div id='order_summary' class="text-right mx-auto" style="width: 90%;">
+						Amount: {{ order.get_order_price }} <br>
+						<!-- implement delviery price algorithm here-->
+						Delivery: 0.00 <br>
+						<!-- write method for computing total price for order-->
+						Total: 23.30 
+					</div>
+					<div class="row w-100 mt-3">
+						<div id="payment_method" class="col">
+							<strong>Payment Method:</strong><br>
+							{{ order.payment }}
+						</div>
+						<div id="shipping_method" class="col text-right">
+							<strong>Delivery Method</strong><br>
+							Standard Delivery
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,150 @@
+{% load static %}
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+            input {
+                background:none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+                width: 70%;
+            }
+
+            textarea{
+                background:none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+                height: 9vh;
+                overflow-y: auto;
+                width: 90%;
+            }
+
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.9), 0 6px 20px 0 rgba(0, 0, 0, 0.9);
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #F2F1F2;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+			}
+			.side-shadow{
+				box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.7);
+			}
+		</style>
+		<script>
+			function readURL(input){
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                    	$('#image_preview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+			function set_email(){
+				$('#id_contact_email').val('{{ user.email }}');
+			}
+			$(document).ready(function () {
+			   set_email();
+			   $('#id_bio_img').change(function(){
+                    readURL(this);
+                })
+            });
+		</script>
+	</head>
+	<body>
+		{% include 'nav/home_nav.html' %}
+		<div id="art_news_ticker" style="background-color:#B1BFC2; height: 3vh;" class="nav-shadow">
+
+		</div>
+		<div style="background-color: #7A8087; height: 4.5vh" class="navbar navbar-expand-lg py-0">
+
+		</div>
+		<form class="p-2 didot mx-auto" enctype="multipart/form-data" style="width: 95%; height: 85vh;" action='' method="POST">
+			{% csrf_token %}
+			<div class="row mx-auto">
+				<div class="col-3 mx-auto mt-3" style="background-color: #D6D5D5;">
+						<div class="container p-2 mt-4 mx-auto" style="width:85%;">
+							Image: {{ form.bio_img }}
+							<div class="mw-100 mt-2 text-center" style='height: 27vh; border: 0.5px dashed gray;'>
+								<img id='image_preview' class="mw-100 mh-100">
+							</div>
+						</div> 
+						<div class="container p-2 mt-3 mx-auto" style="color:#5E5E5E; width: 85%;">
+							Name:<br>
+							{{ user.username }}
+						</div>
+						<div class="container p-2 mt-3 mx-auto" style="color:#5E5E5E; width: 85%;">
+							Bio:<br>
+							{{ form.bio }}
+						</div>
+						<div class="container py-3 px-2 mx-auto" style="color:#5E5E5E; width: 85%;">
+							Contact:<br>
+							Email: {{ form.contact_email }}<br>
+							Instagram: <input type=text id="instagram_url" placeholder="Enter URL or 'NA' if  None" name='instagram_url'><br>
+							Pinterest: <input type=text id="pinterest_url" placeholder="Enter URL or 'NA' if None" name='pininterest_url'><br>
+							Twitter: <input type=text id="twitter_url" placeholder="Enter URL or 'NA' if  None" name='twitter_url'><br>
+							Facebook: <input type="text" id="facebook_url" placeholder="Enter URL or 'NA' if None" name='facebook_url'><br>
+						</div>
+				</div>
+				<div class="col-9">
+					<div class="px-2 py-2 mx-auto mt-5 didot text-center box-shadow" style="width: 90%; background-color: #70767D; color:white;">
+						<span>Please read creator policies and agree</span>
+					</div>
+					<div class="mt-4 container mx-auto box-shadow" style="width: 90%; height: 62vh; background-color: white; overflow-y: auto;">
+					</div>
+					<div class="mt-4 container mx-auto didot">
+						<input type='submit' class="btn btn-dark float-right mr-5" style="width: 20%;" value='Confirm'/>
+					</div>      
+				</div>
+			</div> 
+		</form>
+		<footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+            }
+            .borderless td, .borderless th, .borderless tr {
+                border: none;
+            }
+            input[type='number']{
+                border: none;
+                background: none;
+                border-bottom: 1px solid white;
+            }
+		</style>
+    </head>
+    <body style="background-color: #656D71">
+        {% include 'nav/home_nav.html' %}
+        <div id='art_news_ticker' style="background-color:#2A303B; height: 3vh;" class="nav-shadow">
+
+        </div>
+        {% include 'nav/blog_critique_nav.html'%}
+        <div class="mt-3 didot row mx-auto" style="width: 95%; color: white">
+            <div class="col-9">
+                <h3 class="my-2">#{{ object.tag_text }}</h3>
+                <hr style="background-color:white;">
+                <div class="mt-3">
+                    {% for blog in object.blog_set.all %}
+                        <div class="card my-2 w-100" style="background-color: #90989E; height: 15vh;">
+                           <div class="container-fluid h-100">
+                            <div class="row h-100" style="max-width: 100%;">
+                                <div class="col-3 h-100" style="background-image: url('{{ blog.cover_thumbnail.url }}'); background-size: cover; background-position: 50% 50%;">
+                                </div>
+                                <div class="col-9 h-100">
+                                    <div class="mt-4">
+                                        <a href="{% url 'webb:blog_detail' blog.pk %}"><h5>{{ blog.title }}</h5></a>
+                                        <div>{{ blog.text |striptags|safe|truncatewords:20}}</div>
+                                        <div class="float-right text-right">
+                                            Created At: {{ blog.created_at }}<br>
+                                            <span style="color: rgb(200, 40, 72);">&hearts;</span>{{ blog.number_of_likes }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           </div>
+                        </div>
+                    {% endfor %}
+                    {% for critique in object.critique_set.all %}
+                    <div class="card my-2 w-100" style="background-color: #90989E; height: 15vh;">
+                        <div class="container-fluid h-100">
+                         <div class="row h-100" style="max-width: 100%;">
+                             <div class="col-3 h-100" style="background-image: url('{{ critique.cover_thumbnail.url }}'); background-size: cover; background-position: 50% 50%;">
+                             </div>
+                             <div class="col-9 h-100">
+                                 <div class="mt-4">
+                                     <a href="{% url 'webb:critique_detail' critique.pk %}"><h5>{{ critique.title }}</h5></a>
+                                     <div>{{ critique.text |striptags|safe|truncatewords:20 }}</div>
+                                     <div class="float-right text-right">
+                                         Created At: {{ critique.created_at }}<br>
+                                         <span style="color: rgb(200, 40, 72);">&hearts;</span>{{ critique.number_of_likes }}
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                        </div>
+                     </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-3 w-100" style="height: 77vh;">
+                <div class="container-fluid w-100 px-1 mt-3 py-2 h-100" style="border-color: white; border-style: double; border-width: 8px;
+                overflow-y: auto;">
+                    <div class="d-flex flex-wrap">
+                        {% for hashtag in hashtags_list %}
+                        <div class='m-1'><a class="btn btn-dark" href="{{ hashtag.get_absolute_url }}"
+                            style="width: fit-content;">{{ hashtag.tag_text }}</a></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+    </body>
+</html>

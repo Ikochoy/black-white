@@ -1,0 +1,46 @@
+{% csrf_token %}
+<style>
+    input[type='text']{
+        width: 100%;
+        border: 1px solid gainsboro;
+    }
+    input[type='text']:hover{
+        border: 1px solid skyblue;
+    }
+    td{
+        width: fit-content;
+        padding-top: 10px;
+    }
+</style>
+<script>
+    function submitAddressForm(type){
+        $.ajax({
+            url: "{% url 'webb:create_address' %}", 
+            data:{
+                'address': $('#id_address').val(),
+                'address_2': $('#id_address_2').val(),
+                'zip_code': $('#id_zip_code').val(),
+                'city': $('#id_city').val(),
+                'country': $('#id_country').val(),
+                'type': type
+            },
+            success: function(data){
+                if (type == 'B'){
+                    $('#billing').html(data);
+                }else{
+                    $('#shipping').html(data);
+                }
+                $('#address_add').modal('show');
+            }
+        })
+    }
+</script>
+<table>
+    <form id="address_add_form" method="POST" action="">
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td><button type="button" class="btn btn-dark submit float-right mt-3">Submit</button></td>
+        </tr>
+    </form>
+</table>

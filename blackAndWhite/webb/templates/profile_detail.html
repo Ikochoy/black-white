@@ -1,0 +1,335 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <style>
+            .avantar{
+                width: 5%;
+                height: 5%;
+                object-fit:cover;
+                border-radius:50%;
+            }
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+			}
+        </style>
+        <script>
+            function openAddress(type){
+                $.ajax({
+                    url: "{% url 'webb:load_address_form' %}",
+                    success: function(data){
+                        $('#address_form').html(data);
+                        $('#address_add').find('.submit').attr('onclick', `submitAddressForm('${type}')`);
+                        $('#address_add').modal('show');
+                    }
+                });
+            }
+
+            function openUpdateAddress(pk){
+                console.log(pk);
+                var url = "{% url 'webb:update_address_view' 123 %}";
+                url = url.replace('123', pk);
+                $.ajax({
+                    url: url,
+                    success: function(data){
+                        $('#update_form').html(data);
+                        $('#address_update').modal('show');
+                    }
+                })
+            }
+
+            function change_email(){
+                $.ajax({
+                    url: "{% url 'webb:change_email' %}",
+                    data:{
+                        'email': $('#new_email').val()
+                    },
+                    success: function(data){
+                        $('#email_input').hide();
+                        $('#email_text').html('{{ object.user.email }}');
+                        $('#email_text').show();
+                    }
+                });
+            }
+
+            function show_email_input(){
+                $('#email_text').hide();
+                $('#email_input').show();
+            }
+
+        </script>
+    </head>
+    <body style="background-color: '#979AA0';">
+        {% include 'nav/home_nav.html' %}
+        <div id="art_news_ticker" style="background-color:#B1BFC2; height: 3vh;" class="nav-shadow">
+        </div>
+        <div class="mt-4">
+            {% if not user.profile.pk == object.pk %}
+                <div class="text-center">
+                    <img src="{% static 'images/access_denied.svg' %}" style="max-height: 30vh;" class='mt-3'/>
+                    <h5 class='didot mt-3' style='font-weight: bold'>You do not have acccess on this page</h5>
+                </div>
+            {% else %}
+                <div class="container didot">
+                    <div class="row w-100">
+                        <div class="col">
+                            <h2 style="font-weight: bold;" class="py-2">{{ object.user.username }}</h2>
+                            <div id="email">
+                                <h5 id='email_text' style="font-weight: bold;">{{ object.user.email }}</h5>
+                                <div id="email_input" style="display:none;">
+                                    <input id='new_email' type="email" value="{{ object.user.email }}" 
+                                    style="width: 40%; background: none; border: none; border-bottom: 1px solid white;"/>
+                                    <button class="btn btn-primary py-0" onclick='change_email()'>Save</button>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                Email Verified: {{ object.email_verified |yesno:"YES, NO, MAYBE" }}
+                                <button class="btn btn-light py-0" onclick="show_email_input()">Change Email</button>
+                                {% if not object.email_verified %}
+                                    <button class="btn btn-dark py-0">Verify Email</button>
+                                {% endif %}
+                            </div>
+                            <div class="mt-2">
+                                Newsletter Subscribe: {{ object.subscribed |yesno:"YES, NO, MAYBE" }}
+                                {% if object.subscribed %}
+                                    <button class="btn btn-secondary py-0">
+                                        unsubscribed our newsletter
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-secondary py-0">
+                                        subscribed to our newsletter
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div style="width: fit-content; border: 1px solid black" class="p-2 ml-auto mt-4">
+                                <strong><a data-toggle="modal" data-target='#following_modal' style="cursor:pointer;">Following:</a></strong>
+                                <h2 class="text-center">{{ object.get_following_count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <span style="font-weight: bold;">Date Joined: {{ object.user.date_joined }}</span>
+                    </div><br>
+                    <hr style="color:black;">
+                    <div class="w-100 row">
+                        <div class='col'>
+                            <div id='coupon_collection'>
+                                Coupon Collection 
+                                <div class="card d-flex flex-nowrap mt-2">
+                                    <div class="card-body">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id='shipping_address' class="mt-3">
+                                Shipping Address 
+                                <div class="card mt-2">
+                                    <div id='shipping' class="card-body">
+                                        {% if object.get_shipping_address %}
+                                            {{ object.get_shipping_address }}
+                                            <button class="btn btn-outline-dark mt-3 float-right"
+                                            style="font-size: small" onclick="openUpdateAddress('{{ object.get_shipping_address.pk }}')">
+                                                Edit Shipping Address
+                                            </button>
+                                        {% else %}
+                                            <span>No Shipping Address Yet</span>
+                                            <div class="float-right">
+                                                <button class="btn btn-secondary" onclick="openAddress('S')">Add Address</button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id='billing_address' class="mt-3">
+                                Billing Address
+                                <div class="card mt-2">
+                                    <div id='billing' class="card-body">
+                                        {% if object.get_billing_address %}
+                                            {{ object.get_billing_address }}
+                                            <button class="btn btn-outline-dark mt-3 float-right"
+                                            style="font-size: small" onclick="openUpdateAddress( '{{ object.get_billing_address.pk }}' )">
+                                                Edit Billing Address
+                                            </button>
+                                        {% else %}
+                                            <span>No Billing Address Yet</span>
+                                            <div class="float-right">
+                                                <div class="float-right">
+                                                    <button class="btn btn-secondary" onclick="openAddress('B')">Add Address</button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div>
+                                Order History
+                                <div class="card mt-2">
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            {% for order in object.get_order_history %}
+                                                <li class="list-group-item">
+                                                    <a href="">{{ order.reference_no }}</a>
+                                                    <div class="row w-100">
+                                                        <div class="col">
+                                                            Price: {{ order.payment.amount }}
+                                                        </div>
+                                                        <div class="col text-right">
+                                                            Ordered At: {{ order.ordered_at }}<br>
+                                                            Order Status | {{ order.get_status }}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% empty %}
+                                                <li class="list-group-item">
+                                                    You have not placed any order yet.
+                                                    <a class="float-right btn btn-outline-secondary py-1 mt-2" 
+                                                    href="{% url 'webb:products' 'AP' %}" style="font-size: small;">
+                                                        Check Out Products Here
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+    </body>
+</html>
+
+<div id='address_add' class="modal fade didot">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Add An Address</h5>
+                <button class='close' data-dismiss='modal'>
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="address_form">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='address_update' class="modal fade didot">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class='modal-content'>
+            <div class="modal-header">
+                <h5>Update Address</h5>
+                <button class='close' data-dismiss='modal'>
+                    &times;
+                </button>
+            </div>
+            <div class='modal-body'>
+                <div id='update_form'>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="following_modal" class="modal fade didot">
+    <div class="modal-dialog">
+       <div class="modal-content">
+        <div class='modal-header'>
+            <h5>Creators You Are Following</h5>
+            <button class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            {% for follower in object.get_following_list %}
+                <div class='row text-center w-100'>
+                    <div class="col">
+                        <img src="{{ follower.bio_img.url }}" class="avantar" />
+                    </div>
+                    <div class="col">
+                        <a href='{{ follower.get_absolute_url }}'>{{ follower.profile.user.username }}</a>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-outline-dark py-0">Unfollow</button>
+                    </div>
+                </div><hr>
+            {% empty %}
+                <div class="text-center">
+                    You have not followed any creators yet.
+                </div>
+            {% endfor %}
+        </div>
+       </div>
+    </div>
+</div>

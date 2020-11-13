@@ -1,0 +1,19 @@
+{% if order %}
+    {% for product in order.products %} 
+        <div class="row w-100">
+            <div class="col text-center">
+                <img src="{{ product.product.pic.url }}" style="height: 10vh;">
+            </div>
+            <div class="col text-center">
+                <button class="btn btn-secondary mx-1">-</button>
+                <input type="number" id='order_product_{{product.pk}}' value="{{ product.quantity }}">
+                <button class="btn btn-secondary mx-1">+</button>
+            </div>
+            <div class="col text-center">
+                <button class="btn btn-danger">&times;</button>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    You don't have any active order currently.
+{% endif %}

@@ -1,0 +1,121 @@
+{% load static %}
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<script>
+			function call_collapse(id){
+				$(id).collapse('show');
+			}
+
+		</script>
+		<style>
+			.cover{
+				background-size: cover;
+                background-position: 50% 50%;
+                width: 100%;
+                height: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.cover-image {
+				background-image: url("{% static 'images/cover.png' %}");
+				background-color: #cccccc;
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+			.btn-white{
+				background-color: rgba(255, 255, 255, 0.6);
+				border: 3px solid white;
+				border-radius: 0%;
+				letter-spacing: 0.2vw;
+				font-size: 12px;
+			}
+			.btn-white:hover{
+				background-color:white;
+				color: black;
+				border-radius: 0%;
+				letter-spacing: 0.2vw;
+				font-size: 12px;
+			}
+		</style>
+	</head>
+	<body style="width: 100%; height: 100%; background-color: black;">
+		{% include 'nav/home_nav.html' %}
+		<div id="art_news_ticker" style="background-color: rgb(59, 59, 66); height: 3vh;" class="nav-shadow">
+			
+		</div>
+		<div class="row w-100 mx-auto" style="height: 57vh;">
+			<div class="col-5 h-100 px-0">
+				<div class="w-100 h-100 carousel slide px-0" data-ride="carousel">
+					<div class="carousel-inner">
+						<div class="carousel-item active cover" style="background-image: url('{% static 'images/sample_1.jpg' %}')">
+							<div class="carousel-caption d-none d-md-block" style="background-color: rgba(0, 0, 0, 0.507); color:white;position: absolute; left: 0px;">
+							  <h5>First slide label</h5>
+							  <p>Nulla vitae elit libero</p>
+							</div>
+						</div>
+						<div class="carousel-item cover" style="background-image: url('{% static 'images/sample_3.jpg' %}')">
+							<div class="carousel-caption d-none d-md-block" style="background-color: rgba(0, 0, 0, 0.507); color:white; position: absolute; left: 0px;">
+							  <h5>First slide label</h5>
+							  <p>Nulla vitae elit libero</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-7 h-100 text-center cover-image" style="background-color: #f7faf6;">
+				<a class="btn btn-white didot p-3" style="margin-top: 32vh" href="{% url 'webb:products' 'AP' %}">VIEW PRODUCTS</a>
+			</div>
+		</div>
+		<div class="accordion didot" id="accordion_info" style="color:white;">
+			<div class="card" style="border:none; border-radius: 0%;" class="w-100 my-0">
+				<div class="card-header py-2 panel-toggle" style="background-color: #6F767D; height: 5vh;" onclick="call_collapse('#about_us')">
+					
+				</div>
+				<div id="about_us" class="collapse show" data-parent="#accordion_info">
+					<div class="card-body" style="background-color: #6F767D;height: 20vh;">
+						About Us
+					</div>
+				</div>
+			</div>
+			<div class="card" style="border:none; border-radius: 0%;" class="w-100 my-0">
+				<div class="card-header py-2" style="background-color: #2A303B; height: 5vh;" onclick="call_collapse('#policies')">
+
+				</div>
+				<div id="policies" class="collapse" data-parent="#accordion_info">
+					<div class="card-body" style="background-color: #2A303B;height: 20vh;">
+						Policies
+					</div>
+				</div>
+			</div>
+			<div class="card" style="border:none; border-radius: 0%;" class="w-100 my-0">
+				<div class="card-header py-2" style="background-color: black; height: 5vh;" onclick="call_collapse('#contact_us')"">
+
+				</div>
+				<div id="contact_us" class="collapse" data-parent="#accordion_info">
+					<div class="" style="background-color: black;height: 20vh;">
+						Contact Us
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+

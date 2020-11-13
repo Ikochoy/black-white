@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+			}
+        </style>
+        <script>
+            function openRefundModal(){
+
+            }
+        </script>
+    </head>
+    <body style="background-color: #D3D6D9;">
+        {% include 'nav/home_nav.html' %}
+        <div id="art_news_ticker" style="background-color:#B1BFC2; height: 3vh;" class="nav-shadow">
+        </div>
+        <div class="container">
+            <div class="card w-100">
+                <div class='card-header'>
+                    Order {{ object.reference_no }}
+                    <div class="float-right" style="font-size: small;">
+                        Ordered At | {{ object.ordered_at }}
+                        Status | {{ object.get_status }}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for orderproduct in object.products_set.all %}
+                            <li class="list-group-item">
+                                <div class="row w-100">
+                                    <div class="col">
+                                        <img src="" />
+                                    </div>
+                                    <div class="col">
+                                        Name: {{ orderproduct.product.name }} <br>
+                                        Quantity: {{ orderproduct.quantity }}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <h5 class="float-right">{{ object.payment.amount }}</h5>
+                    <div id='refund_request' class="float-right">
+                        <button class='btn btn-primary' data-toggle='modal'
+                        data-target='refund_request_form'>Request Refund</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<div id='refund_request_form' class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content didot">
+            <div class="modal-header">
+                Request For A Refund
+            </div>
+            <div class="modal-body">
+                <div>
+                    Please fill in the details of the refund form. We will reply to your request as
+                    soonn as possible. Thank you. Note that your request of refund will only be considered
+                    if your order was placed within a month. 
+                    <div id="refund_request_form">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

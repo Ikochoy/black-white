@@ -1,0 +1,49 @@
+<style>
+    input[type=text]{
+        width: 100%;
+        border: 1px solid gainsboro;
+    }
+</style>
+<script>
+    function prep(){
+        console.log('hello');
+        $('#id_address').val('{{ address.address }}');
+        $('#id_address_2').val('{{ address.address_2 }}');
+        $('#id_city').val('{{ address.city }}');
+        $('#id_country').val('{{ address.country }}');
+        $('#id_zip_code').val('{{ address.zip_code }}');
+    }
+    function submitUpdateForm(){
+        var url = "{% url 'webb:update_address' 123 %}";
+        url = url.replace('123', '{{ address.pk }}');
+        $.ajax({
+            url: url,
+            data:{
+                'address': $('#id_address').val(),
+                'address_2': $('#id_address_2').val(),
+                'city': $('#id_city').val(),
+                'zip_code': $('#id_zip_code').val(),
+                'country': $('#id_country').val(),
+            },
+            success: function(data){
+                window.location.reload();
+            }
+        })
+    }
+    $(document).ready(function(){
+        prep();
+    });
+</script>
+    <form id="address_update_form" method="POST" action=".">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td>
+                    <button type="button" class="btn btn-dark submit float-right mt-3"
+                    onclick="submitUpdateForm()">Save</button>
+                </td>
+            </tr>
+        </table>
+    </form>

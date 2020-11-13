@@ -1,0 +1,166 @@
+{% load static %}
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.9), 0 6px 20px 0 rgba(0, 0, 0, 0.9);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+            }
+            .borderless td, .borderless th, .borderless tr {
+                border: none;
+            }
+		</style>
+	</head>
+    <body style="background-color:#BEC3CF;">
+		{% include 'nav/home_nav.html' %}
+		<div id="art_news_ticker" style="background-color:#B1BFC2; height: 3vh;" class="nav-shadow">
+
+		</div>
+        {% include 'nav/product_nav.html' %}
+        <div class="container mt-3 didot">
+            <div class="row w-100 mx-auto mt-5">
+                <div class="col">
+                    <div style="width: 90%;" class="mt-5">
+                        <h2 class="ml-2" style="font-weight: bold;">{{ object.name }}</h2>
+                        <span class="float-right mr-2" style="font-weight: bold;">{{ object.uploader }}</span><br>
+                        <div class="text-center">
+                            <img src="{{ object.pic.url }}" class="box-shadow mt-3" style="max-width: 100%; max-height: 36vh;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card box-shadow mt-4" style="background-color: #818291; color:white; border-radius: 0%;">
+                        <div class="card-header" style="background-color: #6C6D7A">
+                            <h4>Details</h4>
+                        </div>
+                        <div class="card-body mx-auto" style="width: 90%;">
+                            <table class="w-100">
+                                <table class="table w-100 borderless" style="color:white;">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>{{ object.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Creator</td>
+                                        <td>{{ object.uploader }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
+                                        <td>{{ object.description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Category</td>
+                                        <td class="d-flex flex-nowrap flex-wrap">
+                                            {% for cat in object.category.all %}
+                                                {{ cat }}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Available Sizes</td>
+                                        <td>{{ object.available_sizes }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tags</td>
+                                        <td>{{ object.tags }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Supported Formats</td>
+                                        <td>{{ object.formats }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td>{% if object.in_stock %}
+                                                in stock
+                                            {% else %}
+                                                out of stock
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="d-flex flex-row w-100 justify-content-center">
+                                    <div class="p-2" style="background-color: #A8AABB; font-style: italic; width: 50%;">
+                                        Price  <span class="ml-3">{{ object.price }}</span>
+                                    </div>
+                                    <div class="p-2 ml-3" style="background-color: #A8AABB; font-style: italic;">
+                                        Quantity
+                                        <span class="ml-3">
+                                            {{ object.quantity }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- <button class="mt-4 px-3 btn float-right" style="background-color: #505169; font-style: italic; color:white;">
+                                    Add To Cart
+                                </button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+
+    </body>
+</html>

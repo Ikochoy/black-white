@@ -1,0 +1,144 @@
+{% load static %}
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.9), 0 6px 20px 0 rgba(0, 0, 0, 0.9);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+			}
+		</style>
+	</head>
+	<body>
+		{% include 'nav/home_nav.html' %}
+		<div id="art_news_ticker" style="background-color:#B1BFC2; height: 3vh;" class="nav-shadow">
+
+		</div>
+		<div data-spy="affix" data-offset-top="197" class="w-100">
+			{% include 'nav/product_nav.html' %}
+			<div class="row align-items-center mx-auto py-3" style="background-color: #EBEBEB; width: 100%;">
+				<div class="col">
+					<h4 style="letter-spacing: 0.7vw;" class="didot bold ml-5 mt-1">{{ category }}</h4>
+				</div>
+				<div class="col text-right">
+					<button class="btn btn-light mr-4 px-5 py-1 didot" data-toggle="modal" data-target="#filter_modal">Filter</button>
+				</div>
+			</div>
+		</div>	
+		
+		<div id='products' class="m-3 container d-flex flex-nowrap flex-row">
+			{% for product in object_list %}
+				<div style="height: 20vh;" class="relative mx-4 my-3 text-center">
+					<div class="product-item">
+						{% if product.has_tags %}
+						<span class="badge badge-secondary px-2 badge-new" style="border-radius: 0%;">{{ product.tags }}</span>
+						{% endif %}
+						<a href='{{ product.get_product_url }}'><img src="{{ product.pic.url }}" class="mw-100 h-100 mx-auto"></a>
+					</div>
+					<div class="mt-2 text-center didot p-2" style="color:white; background-color: #1D1F24;font-size: 13px;">
+						<div class="p-1" style="border-style:dotted; border-color: whitesmoke; border-width: 2px;">
+							{{ product.name }}<br>
+							<a href='{{ product.uploader.creator.get_absolute_url }}'>{{ product.uploader.user.username }}</a>
+						</div>
+					</div>
+				</div>
+			{% empty %}
+				<div class="container">
+					<h5 class="didot"> No product of this category yet.  ●︿●</h5>
+				</div>
+			{% endfor %}
+		</div>
+
+		<footer class="fixed-bottom">
+			<div class="pagination w-100 justify-content-center didot">
+				<span class="step-links">
+					{% if page_obj.has_previous %}
+						<a href="?page=1">&laquo; first</a>
+						<a href="?page={{ page_obj.previous_page_number }}">previous</a>
+					{% endif %}
+			
+					<span class="current">
+						Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+					</span>
+			
+					{% if page_obj.has_next %}
+						<a href="?page={{ page_obj.next_page_number }}">next</a>
+						<a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+					{% endif %}
+				</span>
+			</div>
+			<div id="copyright" class="didot py-1 px-3 mt-3" style="background-color:black; color:white; width: 100%;">
+				 Copyright owned by Molekiu Limited
+			</div>
+	
+		</footer>
+	</body >
+</html>
+
+
+<div id="filter_modal" class="modal fade">
+	<div class="modal-dialog shadow-lg" style="border-radius: 0%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				Filter
+			</div>
+		</div>
+	</div>
+</div>

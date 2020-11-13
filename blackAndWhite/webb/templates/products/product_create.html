@@ -1,0 +1,328 @@
+{% load static %}
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.didot{
+				font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+			}
+			.bold{
+				font-weight: bold;
+			}
+			.box-shadow{
+				box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			}
+			.nav-shadow{
+				box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.9), 0 6px 20px 0 rgba(0, 0, 0, 0.9);
+			}
+			.product-nav-item{
+				height: 100%;
+				display: block;
+				color:white;
+			}
+			.product-nav-item:hover{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			.product-nav-item:active{
+				background-color: rgb(185, 184, 184);
+				color: black;
+			}
+			a{
+				text-decoration: none;
+				color:white
+			}
+			a:hover{
+				text-decoration: none;
+				color: white;
+			}
+			.affix {
+				top: 0;
+				width: 100%;
+				z-index: 9999 !important;
+			}
+			body{
+				background-color: #D5DAE0;
+			}
+			.badge-new{
+				position: absolute;
+				right:0px;
+				top:0px;
+			}
+			.product-item{
+				position:relative;
+				/* padding-top:20px; */
+				display:inline-block;
+            }
+            .borderless td, .borderless th, .borderless tr {
+                border: none;
+            }
+            input{
+                background:none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+            }
+            textarea{
+                overflow-y: auto;
+                background:none;
+                border: 0;
+                outline: 0;
+                border-bottom: 1px solid white;
+                height: 5vh;
+                color:white
+            }
+            ::placeholder {
+                color: gainsboro;
+            }
+            ul{
+                list-style:none;
+            }
+        </style>
+        <script>
+            function close_size_modal(){
+                $('#nonshirt').modal('hide');
+            }
+
+            function add_width_height(){
+                var width = $('#width').val();
+                var height = $('#height').val();
+                var width_unit = $('#width_unit').val();
+                var height_unit = $('#height_unit').val();
+                var size_string = '(' + width.toString() + width_unit + ', ' +height.toString() + height_unit + ')';
+                $('#sizes').prepend("<span class='mx-2'>"+size_string+"</span>");
+                $('#width').val('');
+                $('#height').val('');
+                $('#nonshirt').modal('hide');
+                var origin_str = $('#id_available_sizes').val();
+                origin_str += size_string + ';';
+                $('#id_available_sizes').val(origin_str);
+
+            }
+
+            function readURL(input){
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                    $('#image_preview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function inputText() {
+                var x = document.getElementById("id_name").value;
+                document.getElementById("name_text").innerHTML = x;
+            }
+
+            function prep_checkboxes(){
+                $("#hardcopy").change(function() {
+                    if(this.checked) {
+                        var value = $('#id_formats').val();
+                        value += 'hardcopy, '
+                        $('#id_formats').val(value);
+                    }
+                });
+                $('#digital').change(function() {
+                    if (this.checked){
+                        var value = $('#id_formats').val();
+                        value += 'digital, '
+                        $('#id_formats').val(value);
+                    }
+                });
+            }
+
+            $(document).ready(function(){
+                $('#id_formats').val("");
+                $('#id_pic').change(function(){
+                    readURL(this);
+                    $('#image_upload').hide();
+                    $('#image_preview').show();
+                })
+                $('#id_available_sizes').val('');
+                $('#id_name').attr('oninput', 'inputText()');
+                prep_checkboxes();
+            })
+        </script>
+	</head>
+    <body style="background-color:#9EA5B2;">
+		{% include 'nav/home_nav.html' %}
+		<div id="art_news_ticker" style="background-color:#B1BFC2; height: 3vh;" class="nav-shadow">
+
+		</div>
+        {% include 'nav/product_nav.html' %}
+        <form class="container didot" action="" method="POST" style="color:white;" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row w-100 mx-auto mt-2">
+                <div class="col mt-5">
+                    <div style="width:90%;" class="mt-2">
+                        <h1>Upload New Product</h1>
+                    </div><br>
+                    <div style="width: 90%;" class="mt-3">
+                        <h3>{{ form.name }}</h3>
+                        <span class="float-right">{{ user.username }}</span><br>     
+                        <div class="text-center p-3 mt-4" style="border: 1px solid white;">
+                            <img id="image_upload" class="w-75 mx-auto my-4" src="{% static 'images/upload_images.svg' %}"/>
+                            {{ form.pic }}
+                            <img id="image_preview" class="box-shadow mt-3" style="display:none; max-height: 40vh; max-width: 100%;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mt-3">
+                    <div class="card box-shadow mt-3" style="background-color: #B2BCCC; color:white; border-radius: 0%;">
+                        <div class="card-header" style="background-color: #A6AFBE">
+                            <h4>Details</h4>
+                        </div>
+                        <div class="card-body mx-auto p-2" style="width: 90%;">
+                            <div class="w-100">
+                                <table class="table w-100 borderless" style="color:white;">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td id="name_text"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Creator</td>
+                                        <td>{{ user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description</td>
+                                        <td>{{ form.description }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Category</td>
+                                        <td class="d-flex flex-nowrap flex-row">
+                                            {% for field in form.category %}
+                                                <div class="mr-2" id="{{ forloop.counter }}">{{ field }}</div>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Available Sizes</td>
+                                        <td id="sizes">
+                                            <span style="display: none;">{{ form.available_sizes }}</span>
+                                            <button id="size_btn" class="btn" style="background:none; border: 1px dotted white;"
+                                            type="button" data-toggle="modal" data-target="#nonshirt">+</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tags</td>
+                                        <td>
+                                            {{ form.tags }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">{{ form.original }}</td>
+                                        <td> Is this product original </td>
+                                    </tr>
+                                </table>
+                                <div class="d-flex flex-row w-100">
+                                    <div class="p-2" style="background-color: #979DAA; font-style: italic; width: 50%;">
+                                        Price  
+                                        <span class="mr-4 text-right">
+                                            {{ form.price }}
+                                        </span>
+                                    </div>
+                                    <div class="p-2 ml-3" style="background-color: #979DAA; font-style: italic;">
+                                        Available Quantity
+                                        <span class="mr-4 text-right">
+                                           {{ form.quantity }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row w-100 mt-3">
+                                    <div class="p-2">
+                                        Enable DAS 
+                                        <span>{{ form.enable_das }}</span>
+                                    </div>
+                                    <div class="p-2">
+                                        Enable Crossover
+                                        <span>{{ form.enable_crossover }}</span>
+                                    </div>
+                                </div>
+                                <div class="p-2 row">
+                                    <table class="table table-borderless" style="color:white;">
+                                        <tr>
+                                            <td>Supported Formats</td>
+                                            <td>
+                                                <label for='hardcopy'>hard copy</label>
+                                                <input type="checkbox" id="hardcopy">
+                                            </td>
+                                            <td>
+                                                <label for="digital">digital</label>
+                                                <input type='checkbox' id="digital">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <span style="display:none;">{{ form.formats }}</span>
+                                </div>
+                                <input type="submit" class="mt-1 px-3 btn float-right" style="background-color: #737A88; font-style: italic; color:white;" value="Save">
+                                </input>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            {{ form.err }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    
+        <div id="nonshirt" class="modal fade didot">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="border: none;">
+                        <h4>Add Size</h4>
+                        <button class="close" onclick="close_size_modal()">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col text-center">
+                                Width: 
+                                <br><span>
+                                    <input id="width" type="number" style="border: 1px solid gray; width: 70px;">
+                                    <select id="width_unit">
+                                        <option value="cm">cm</option>
+                                        <option value="inch">inch</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div class="col text-center">
+                                Height: 
+                                <br><span>
+                                    <input id="height" type="number" style="border: 1px solid gray;width: 70px;">
+                                    <select id="height_unit">
+                                        <option value="cm">cm</option>
+                                        <option value="inch">inch</option>
+                                        <option value="mm">mm</option>
+                                        <option value="px">px</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="float-right btn btn-dark mt-4" onclick="add_width_height()">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="fixed-bottom justify-content-between d-flex py-1 px-3" style="background-color:black; color:white;">
+			<div id="copyright" class="didot">
+				 Copyright owned by Molekiu Limited
+			</div>
+		</footer>
+
+    </body>
+</html>

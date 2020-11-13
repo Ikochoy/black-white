@@ -1,0 +1,38 @@
+<style>
+    td{
+        padding: 5px;
+    }
+</style>
+<div class="container text-center didot">
+    <img src="{{ product.pic.url }}" style="max-width: 80%; max-height: 30vh;">
+    <div class="container text-center mt-3">
+        <h5>Details</h5>
+        <table style="width: 85%" class="mx-auto">
+            <tr>
+                <td>Name</td>
+                <td>{{ product.name }}</td>
+            </tr>
+            <tr>
+                <td>Uploaded at</td>
+                <td>{{ product.uploaded_date }}</td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>{{ product.description }}</td>
+            </tr>
+            <tr>
+                <td>No Sales</td>
+                <td>{{ product.no_sales }}</td>
+            </tr>
+        </table>
+        <div class="btn-group didot mt-3">
+            {% if not product.hide_from_profile %}
+                <button type='button' class="btn btn-light" onclick="set_hide_from_profile('product', '{{ product.pk }}', true)">Hide From Profile</button>
+            {% else %}
+                <button type='button' class="btn btn-light py-0" onclick="set_hide_from_profile('product', '{{ product.pk}}',false)">Reveal Product</button>
+            {% endif %}
+            <button class="btn btn-secondary">Request For Delete</button>
+            <a class="btn btn-dark" href="{% url 'webb:product_update' product.pk  %}">Edit Product</a>
+        </div>
+    </div>
+</div>

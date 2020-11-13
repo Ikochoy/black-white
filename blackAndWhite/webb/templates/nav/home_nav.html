@@ -1,0 +1,101 @@
+<script>
+    function open_cart_modal(){
+        $.ajax({
+            url: "{% url 'webb:order_cart_view' %}",
+            success: function(data){
+                $('#cart_body').html(data);
+                $('#cart_products').modal('show');
+            }
+        });
+    }
+
+    function remove_from_cart(){
+        $.ajax({
+            url: "{% url 'webb:remove_from_cart' %}",
+            success: function(data){
+                
+            }
+        })
+    }
+
+    function change_product_quantity(){
+
+    }
+
+</script>
+
+{% load static %}
+<nav id="navbar" class="navbar navbar-expand py-0 navbar-right" style="background-color: black; height:fit-content;">
+    <a class="navbar-brand ml-4 mt-2 didot bold" style="color:white;font-size: 26px;" href="{% url 'webb:home' %}">black&White</a>
+    <ul class="navbar-nav ml-auto mr-3">
+        <li class="nav-item didot" style="color: white;">
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn" style="background-color: none; color:white;" data-toggle="dropdown">
+                        {{ user.username }}</button>
+                    <div class="dropdown-menu">
+                        <a class="p-2 dropdown-item" href="{{ user.profile.get_absolute_url }}">See Profile</a>
+                        <a class="p-2 dropdown-item" href="{% url 'webb:creator_create' %}">Become a Creator</a>
+                        <a class="p-2 dropdown-item" href="{% url 'webb:sign_out' %}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a data-toggle="modal" data-target="#sign_in">
+                    <img src="{% static 'images/user.png' %}" style="width:4vh; height:4vh;">
+                </a>
+            {% endif %}
+        </li>
+        <li class="nav-item">
+            <a onclick="open_cart_modal()">
+                <img class="ml-4" src="{% static 'images/cart_bw.png'%}" style="width:4vh; height:4vh;">
+            </a>
+            <span id='no_product_cart' class="badge badge-pill badge-light">0</span>
+        </li>
+    </ul>
+</nav>
+<div id="sign_in" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 0%;">
+        <div class="modal-header didot" style="background-color: white; border:none;">
+            <h5>Login</h5>
+            <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body w-100 didot text-center">
+            <img src="{% static 'images/logo.png' %}" class="w-50 mx-auto">
+            <form action="{% url 'webb:sign_in' %}" method="POST">
+                {% csrf_token %}
+                <input name="username" placeholder="Enter Username" type="text" class="mx-auto w-100 mt-3"><br>
+                <input name="password" placeholder="Enter Password" type="password" class="mx-auto mt-3 w-100"><br>
+                <input type="submit" class="btn btn-light didot float-right mt-3" value="Login">
+            </form>
+            <br><br>
+            <div class="row w-100 didot mt-4 mx-auto" style="font-size: 12px;">
+                <div class="col text-left">
+                    Forgot Password?
+                </div>
+                <div class="col text-right">
+                    Don't have an Account?
+                    <a href="{% url 'webb:sign_up' %}" style="color:black; text-decoration: underline">Create One</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div id="cart_products" class="modal fade didot">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 0%; border:none;">
+            <div class="modal-header" style="background-color: rgb(207, 207, 207);">
+                My Cart
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="cart_body"></div>
+            </div>
+        </div>
+    </div>
+</div>
